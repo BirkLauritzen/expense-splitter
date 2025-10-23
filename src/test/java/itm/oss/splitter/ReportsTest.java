@@ -88,6 +88,29 @@ public class ReportsTest {
 
             // If later a function for descributing remainder cents, the assertions will have to be updated.
         }
+
+        @Test
+        @DisplayName("Expense with zero participants is ignored")
+        void perPerson_ignoresZeroParticipants() {
+            Reports reports = new Reports();
+            ArrayList<Expense> xs = new ArrayList<>();
+
+            xs.add(exp("Alice", "100.00", List.of(), "misc"));
+
+            SimplePersonSummaryMap m = reports.perPerson(xs);
+            assertEquals(0, m.keys().length, "No entries should be created");
+        }
+
+        @Test
+        @DisplayName("Zero-amount expense has no effect")
+        void perPerson_zeroAmount() {
+            Reports reports = new Reports();
+            ArrayList<Expense> xs = new ArrayList<>();
+
+            xs.add(exp("Alice", "0.00", List.of("Alice","Bob"), "snacks"));
+
+            SimplePersonSummaryMap m = reports.perPerson(xs);
+            assertMoney("0.00", m.get("Alice").getPaidTotal(), "Alice paid");
+            assertMoney("0.00", m.get("Bob").getOwedTotal(), "Bob owes");
+        }
 }
-
-
