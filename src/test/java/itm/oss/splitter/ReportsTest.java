@@ -4,10 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ReportsTest {
@@ -43,6 +46,48 @@ public class ReportsTest {
         assertEquals(new BigDecimal("60.00"), xs.get(0).getAmount(), "the amount should be 60");
         assertEquals(3, xs.get(0).getParticipants().size(), "There should be three participants");
     }
+
+// Unit testing
+
+    // Unit: perPerson splitting
+        private static final RoundingMode RM = RoundingMode.HALF_UP;
+
+        private static void assertMoney(String expected, BigDecimal actual, String msg) {
+            assertEquals(new BigDecimal(expected).setScale(2, RM),
+                        actual.setScale(2, RM),
+                        msg);
+        }
+
+        // Helper from Expense
+    private static Expense exp(String payer, String amount, 
+                            List<String> participants, String category) {
+        return new Expense(
+            "2025-01-01",
+            payer,
+            new BigDecimal(amount),
+            "USD",
+            new ArrayList<>(participants),
+            category,
+            ""
+        );
+    }
+
+        @Test
+        @DisplayName("Rounding: 10.00 split by 3 uses HALF_UP in code")
+        void perPerson_roundingTenByThree() {
+            Reports reports = new Reports();
+            ArrayList<Expense> xs = new ArrayList<>();
+
+            xs.add(exp("Alice", "10.00", List.of("Alice", "Bob", "Cara"), "snacks"));
+
+            SimplePersonSummaryMap m = reports.perPerson(xs);
+            assertMoney("10.00", m.get("Alice").getPaidTotal(), "payer paid");
+            assertMoney("3.33",  m.get("Alice").getOwedTotal(), "Alice owes");
+            assertMoney("3.33",  m.get("Bob").getOwedTotal(),   "Bob owes");
+            assertMoney("3.33",  m.get("Cara").getOwedTotal(),  "Cara owes");
+
+            // If later a function for descributing remainder cents, the assertions will have to be updated.
+        }
 }
 
 
