@@ -49,7 +49,6 @@ public class ReportsTest {
 
 // Unit testing
 
-    // Unit: perPerson splitting
         private static final RoundingMode RM = RoundingMode.HALF_UP;
 
         private static void assertMoney(String expected, BigDecimal actual, String msg) {
@@ -85,7 +84,6 @@ public class ReportsTest {
             assertMoney("3.33",  m.get("Alice").getOwedTotal(), "Alice owes");
             assertMoney("3.33",  m.get("Bob").getOwedTotal(),   "Bob owes");
             assertMoney("3.33",  m.get("Cara").getOwedTotal(),  "Cara owes");
-
             // If later a function for descributing remainder cents, the assertions will have to be updated.
         }
 
