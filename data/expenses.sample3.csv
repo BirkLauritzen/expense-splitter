@@ -1,0 +1,4 @@
+date,payer,amount,currency,participants,category,notes
+2025-10-01,Alice,60.00,USD,Alice;Bob,Food,Pizza night
+2025-10-02,Alice,120.00,USD,Alice;Bob;Cara,Transport,Taxi + subway
+2025-10-03,Alice,90.00,USD,Alice;Cara,Groceries,Market

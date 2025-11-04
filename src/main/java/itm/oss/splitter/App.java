@@ -8,7 +8,11 @@ import java.util.Scanner;
 
 public class App {
 
+<<<<<<< Updated upstream
   private static final String DATA_FILE = "data/expenses.csv";
+=======
+  private static final String DATA_FILE = "data/expenses.sample3.csv";
+>>>>>>> Stashed changes
 
   private final Scanner sc = new Scanner(System.in);
   private final ExpenseStore store = new ExpenseStore();
